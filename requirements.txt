@@ -1,0 +1,4 @@
+numpy>=1.24
+matplotlib>=3.7
+# LLM mode uses only the standard library (urllib); set GROQ_API_KEY to enable it.
+# pytest is optional: tests are plain asserts and also run with `python tests/test_agents.py`.
