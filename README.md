@@ -58,6 +58,18 @@ cannot improve your position in the draw.
 ![mechanism comparison](results/mechanism_comparison.png)
 ![fairness vs bot adoption](results/fairness_vs_bot_adoption.png)
 
+## Student concept validation (20 participants)
+
+Twenty IIT Hyderabad students provided qualitative feedback on the booking concept. Key needs included **lottery transparency and fairness-credit explanations**, **editable LLM-parsed preferences**, **precise/ranked slot selection**, **group confirmation and cancellation flows**, and **notifications and abuse safeguards**.
+
+These are exploratory concept responses, not measured product adoption or a deployed usability test. See [research/student_concept_validation.md](research/student_concept_validation.md) for anonymized evidence, themes, priorities, and limitations.
+
+## Live parser evaluation harness
+
+Run `python fairslot_live_eval.py` with `GROQ_API_KEY` securely set to evaluate 20 authored natural-language requests. The script records exact-case and expected-field accuracy, parser source (LLM or rules), latency, and errors in `fairslot_live_eval_results.csv`.
+
+**Important:** The repository contains an evaluation *harness*, not a verified success rate. Results must be generated and reviewed before claiming live-model accuracy. The 20 test prompts are separate from the 20 student concept-feedback records; a fallback parse must not be reported as successful LLM parsing.
+
 ## Run it
 ```bash
 pip install -r requirements.txt
@@ -82,6 +94,8 @@ works with a small change there. In the demo output, `[llm]` vs `[rules]` shows 
 | `experiments.py` | Scenarios and the bot-adoption sweep |
 | `run_experiment.py` | Runs the experiments and writes `results/` |
 | `demo.py` | End-to-end demo of agents plus allocator over 3 booking windows |
+| `fairslot_live_eval.py` | Live API evaluation harness for 20 authored preference prompts |
+| `research/student_concept_validation.md` | Anonymized 20-student concept feedback and product priorities |
 | `tests/` | Plain-assert tests (also runnable with pytest) |
 
 ## Design decisions
@@ -98,8 +112,7 @@ works with a small change there. In the demo output, `[llm]` vs `[rules]` shows 
   latency distribution, demand levels) are assumptions, not survey measurements.
 - **Fairness rule is one design.** The credit formula (`allocator.py`) is a reasonable choice, not
   a proven optimum; other rules and their trade-offs are not compared here.
-- **LLM path not tested against a live API.** It is covered by mocks (garbage output, injection,
-  fallback). Try it with your own key before relying on it.
+- **Live LLM evaluation results not yet verified.** The repository provides a 20-case live API harness; no accuracy figures are reported without executing and reviewing it. Existing mocks test error handling and fallback.
 - **Assumes a cooperative venue.** The venue must adopt a declared-interest window. This repo does
   not scrape or book on real platforms, which also keeps it clear of platform terms.
 - **Non-participants.** People who never declare interest are not modelled. A real rollout needs a
@@ -107,5 +120,5 @@ works with a small change there. In the demo output, `[llm]` vs `[rules]` shows 
 
 ## Roadmap
 Discovery agent (ranked event digest instead of the Thursday-evening scroll), a pilot with one
-condo or club app as the venue, comparison of alternative fairness rules, and testing the parsing
-and group flow with real users.
+condo or club app as the venue, comparison of alternative fairness rules, and structured usability testing of the parsing
+and group flow. Concept feedback from 20 students is documented, but usability metrics and a venue pilot remain future work.
